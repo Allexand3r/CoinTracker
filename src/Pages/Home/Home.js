@@ -37,40 +37,41 @@ function Home() {
   }, []);
 
   useEffect(() => {
-    console.log("REACT_APP_API_URL:", process.env.REACT_APP_API_URL); // Логирование URL API
-  
+    console.log("REACT_APP_API_URL:", process.env.REACT_APP_API_URL);
+
     const fetchCryptoData = async () => {
       try {
-        const apiUrl = `${process.env.REACT_APP_API_URL}/api/cryptodata/crypto-data`;
-        console.log("Fetching data from:", apiUrl); // Логирование URL API
-  
+        const apiUrl = `${process.env.REACT_APP_API_URL}/api/cryptodata/crypto-data?timestamp=${new Date().getTime()}`;
+        console.log("Fetching data from:", apiUrl);
+
         const response = await fetch(apiUrl);
-        console.log("Response status:", response.status); // Логирование статуса ответа
-  
+        console.log("Response status:", response.status);
+
+        const contentType = response.headers.get("content-type");
+        console.log("Content-Type:", contentType);
+
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
-  
-        // Задержка перед обработкой ответа
-        await new Promise(resolve => setTimeout(resolve, 5000));
-        console.log('5 sec done')
-  
-        const text = await response.text();
-        console.log("Response text:", text); // Логирование текста ответа
-  
-        const data = JSON.parse(text); // Парсинг текста ответа в JSON
-        console.log("Fetched crypto data:", data); // Логирование данных
-        setCryptoData(data);
+
+        if (contentType && contentType.includes("application/json")) {
+          const data = await response.json();
+          console.log("Fetched crypto data:", data);
+          setCryptoData(data);
+        } else {
+          const text = await response.text();
+          console.log("Response text:", text);
+          throw new Error("Response is not JSON");
+        }
       } catch (error) {
         console.error("Error fetching crypto data:", error);
       }
     };
-  
+
     const interval = setInterval(fetchCryptoData, 60000);
     fetchCryptoData();
     return () => clearInterval(interval);
   }, []);
-  
 
   const openModal = (isRegisterMode) => {
     setIsRegister(isRegisterMode);
