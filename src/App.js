@@ -11,7 +11,7 @@ Modal.setAppElement('#root'); // Убедитесь, что этот селек�
 
 function App() {
   return (
-    <Router>
+    <Router basename="/CoinTracker">
       <div>
         <Routes>
           <Route path="/" element={<Home />} />
