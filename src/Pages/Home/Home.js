@@ -37,26 +37,40 @@ function Home() {
   }, []);
 
   useEffect(() => {
+    console.log("REACT_APP_API_URL:", process.env.REACT_APP_API_URL); // Логирование URL API
+  
     const fetchCryptoData = async () => {
       try {
-        console.log("REACT_APP_API_URL:", process.env.REACT_APP_API_URL); // Logging the API URL
-
-        const response = await fetch(`${process.env.REACT_APP_API_URL}/api/cryptodata/crypto-data`);
+        const apiUrl = `${process.env.REACT_APP_API_URL}/api/cryptodata/crypto-data`;
+        console.log("Fetching data from:", apiUrl); // Логирование URL API
+  
+        const response = await fetch(apiUrl);
+        console.log("Response status:", response.status); // Логирование статуса ответа
+  
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
-        const data = await response.json();
-        console.log("Fetched crypto data:", data); // Logging the data
+  
+        // Задержка перед обработкой ответа
+        await new Promise(resolve => setTimeout(resolve, 5000));
+        console.log('5 sec done')
+  
+        const text = await response.text();
+        console.log("Response text:", text); // Логирование текста ответа
+  
+        const data = JSON.parse(text); // Парсинг текста ответа в JSON
+        console.log("Fetched crypto data:", data); // Логирование данных
         setCryptoData(data);
       } catch (error) {
         console.error("Error fetching crypto data:", error);
       }
     };
-
+  
     const interval = setInterval(fetchCryptoData, 60000);
     fetchCryptoData();
     return () => clearInterval(interval);
   }, []);
+  
 
   const openModal = (isRegisterMode) => {
     setIsRegister(isRegisterMode);
