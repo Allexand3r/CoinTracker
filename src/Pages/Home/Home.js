@@ -28,7 +28,6 @@ function Home() {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 25;
   const navigate = useNavigate();
-  const apiUrl = process.env.REACT_APP_API_URL;
 
   useEffect(() => {
     const token = Cookies.get("Authorization");
@@ -40,7 +39,9 @@ function Home() {
   useEffect(() => {
     const fetchCryptoData = async () => {
       try {
-        const response = await fetch(`${apiUrl}/api/cryptodata/crypto-data`);
+        console.log("REACT_APP_API_URL:", process.env.REACT_APP_API_URL); // Logging the API URL
+
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/api/cryptodata/crypto-data`);
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
