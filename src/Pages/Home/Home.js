@@ -38,22 +38,28 @@ function Home() {
 
   useEffect(() => {
     console.log("REACT_APP_API_URL:", process.env.REACT_APP_API_URL);
-
+  
     const fetchCryptoData = async () => {
       try {
         const apiUrl = `${process.env.REACT_APP_API_URL}/api/cryptodata/crypto-data?timestamp=${new Date().getTime()}`;
         console.log("Fetching data from:", apiUrl);
-
-        const response = await fetch(apiUrl);
+  
+        const response = await fetch(apiUrl, {
+          method: 'GET',
+          mode: 'cors',
+          headers: {
+            'Content-Type': 'application/json',
+          }
+        });
         console.log("Response status:", response.status);
-
+  
         const contentType = response.headers.get("content-type");
         console.log("Content-Type:", contentType);
-
+  
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
-
+  
         if (contentType && contentType.includes("application/json")) {
           const data = await response.json();
           console.log("Fetched crypto data:", data);
@@ -67,12 +73,12 @@ function Home() {
         console.error("Error fetching crypto data:", error);
       }
     };
-
+  
     const interval = setInterval(fetchCryptoData, 60000);
     fetchCryptoData();
     return () => clearInterval(interval);
   }, []);
-
+  
   const openModal = (isRegisterMode) => {
     setIsRegister(isRegisterMode);
     setIsModalOpen(true);
