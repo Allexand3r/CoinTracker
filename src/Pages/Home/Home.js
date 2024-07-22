@@ -41,12 +41,12 @@ function Home() {
   
     const fetchCryptoData = async () => {
       try {
-        const apiUrl = `${process.env.REACT_APP_API_URL}/api/cryptodata/crypto-data?timestamp=${new Date().getTime()}`;
+        const apiUrl = `${process.env.REACT_APP_API_URL}/api/cryptodata/crypto-data`;
         console.log("Fetching data from:", apiUrl);
   
         const response = await fetch(apiUrl, {
           method: 'GET',
-          mode: 'cors',
+          mode: 'no-cors',
           headers: {
             'Content-Type': 'application/json',
           }
