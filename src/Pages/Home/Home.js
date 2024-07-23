@@ -46,9 +46,9 @@ function Home() {
   
         const response = await fetch(apiUrl, {
           method: 'GET',
-          mode: 'no-cors',
           headers: {
             'Content-Type': 'application/json',
+            'ngrok-skip-browser-warning': 'true'
           }
         });
         console.log("Response status:", response.status);
