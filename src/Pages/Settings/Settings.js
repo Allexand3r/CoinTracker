@@ -41,7 +41,8 @@ function Settings() {
       const response = await fetch(`${apiUrl}/api/account/get-user`, {
         method: 'GET',
         headers: {
-          'Authorization': `Bearer ${token}`
+          'Authorization': `Bearer ${token}`,
+          'ngrok-skip-browser-warning': 'true'
         }
       });
 
@@ -86,7 +87,9 @@ function Settings() {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${Cookies.get('Authorization')}`
+          'Authorization': `Bearer ${Cookies.get('Authorization')}`,
+          'ngrok-skip-browser-warning': 'true'
+
         },
         body: JSON.stringify(formData)
       });

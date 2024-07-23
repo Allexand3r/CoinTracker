@@ -1,15 +1,23 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import Home from './Pages/Home/Home';
-import Modal from 'react-modal';
-import Portfolio from './Pages/Portfolio/Portfolio';
-import Settings  from './Pages/Settings/Settings';
-import AccountSecurity from './Pages/Settings/AccountSecurity/AccountSecurity'
-
-
-Modal.setAppElement('#root'); // Убедитесь, что этот селектор соответствует корневому элементу вашего приложения
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Home from './Home';
+import Portfolio from './Portfolio';
+import Settings from './Settings';
+import AccountSecurity from './AccountSecurity';
 
 function App() {
+  const redirectToPath = () => {
+    const params = new URLSearchParams(window.location.search);
+    const pathname = params.get('pathname');
+    if (pathname) {
+      window.history.replaceState(null, '', pathname);
+    }
+  };
+
+  React.useEffect(() => {
+    redirectToPath();
+  }, []);
+
   return (
     <Router basename="/CoinTracker">
       <div>
@@ -17,7 +25,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/portfolio-tracker" element={<Portfolio />} />
           <Route path="/settings" element={<Settings />} />
-          <Route path="account-security" element={<AccountSecurity />} />
+          <Route path="/account-security" element={<AccountSecurity />} />
         </Routes>
       </div>
     </Router>
