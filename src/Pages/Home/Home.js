@@ -26,6 +26,7 @@ function Home() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [cryptoData, setCryptoData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
+  const [loading, setLoading] = useState(true); // Добавляем состояние для индикатора загрузки
   const itemsPerPage = 25;
   const navigate = useNavigate();
 
@@ -40,6 +41,7 @@ function Home() {
     console.log("REACT_APP_API_URL:", process.env.REACT_APP_API_URL);
   
     const fetchCryptoData = async () => {
+      setLoading(true); // Устанавливаем состояние загрузки в true перед началом запроса
       try {
         const apiUrl = `${process.env.REACT_APP_API_URL}/api/cryptodata/crypto-data`;
         console.log("Fetching data from:", apiUrl);
@@ -71,6 +73,8 @@ function Home() {
         }
       } catch (error) {
         console.error("Error fetching crypto data:", error);
+      } finally {
+        setLoading(false); // Устанавливаем состояние загрузки в false после завершения запроса
       }
     };
   
@@ -137,66 +141,70 @@ function Home() {
           <MarketInfoDescription>
             The global crypto market cap is $2.12T, a 2.62% increase over the last day. Read More
           </MarketInfoDescription>
-          <CryptoTable>
-            <CryptoTableHeader>
-              <tr>
-                <CryptoTableHeaderCell>#</CryptoTableHeaderCell>
-                <CryptoTableHeaderCell>Name</CryptoTableHeaderCell>
-                <CryptoTableHeaderCell>Price (24h)</CryptoTableHeaderCell>
-                <CryptoTableHeaderCell>Volume (24h)</CryptoTableHeaderCell>
-                <CryptoTableHeaderCell>Market Cap</CryptoTableHeaderCell>
-              </tr>
-            </CryptoTableHeader>
-            <tbody>
-              {cryptoData.length > 0 ? (
-                currentItems
-                  .filter((crypto) => crypto?.quote?.usd?.price && crypto?.quote?.usd?.market_Cap) // Filtering out coins without a price or market_Cap
-                  .map((crypto, index) => {
-                    const price = crypto?.quote?.usd?.price;
-                    const volume24h = crypto?.quote?.usd?.volume_24h;
-                    const marketCap = crypto?.quote?.usd?.market_Cap;
-
-                    const formattedPrice = price ? price.toLocaleString('en-US', {
-                      style: 'currency',
-                      currency: 'USD',
-                    }) : 'N/A';
-
-                    const formattedVolume24h = volume24h ? volume24h.toLocaleString('en-US', {
-                      style: 'currency',
-                      currency: 'USD',
-                    }) : 'N/A';
-
-                    const formattedMarketCap = marketCap ? marketCap.toLocaleString('en-US', {
-                      style: 'currency',
-                      currency: 'USD',
-                    }) : 'N/A';
-
-                    return (
-                      <CryptoTableRow key={crypto.id || index}>
-                        <CryptoTableData>{indexOfFirstItem + index + 1}</CryptoTableData>
-                        <CryptoTableData>
-                          <CryptoSymbolContainer>
-                            <CryptoLogo
-                              src={`https://s2.coinmarketcap.com/static/img/coins/64x64/${crypto.id}.png`}
-                              alt={`${crypto.symbol} logo`}
-                            />
-                            <CryptoName>{crypto.name}</CryptoName>
-                            <CryptoSymbol>{crypto.symbol}</CryptoSymbol>
-                          </CryptoSymbolContainer>
-                        </CryptoTableData>
-                        <CryptoTableData>{formattedPrice}</CryptoTableData>
-                        <CryptoTableData>{formattedVolume24h}</CryptoTableData>
-                        <CryptoTableData>{formattedMarketCap}</CryptoTableData>
-                      </CryptoTableRow>
-                    );
-                  })
-              ) : (
+          {loading ? (
+            <div>Loading...</div> // Отображаем индикатор загрузки
+          ) : (
+            <CryptoTable>
+              <CryptoTableHeader>
                 <tr>
-                  <CryptoTableData colSpan="5">No data available</CryptoTableData>
+                  <CryptoTableHeaderCell>#</CryptoTableHeaderCell>
+                  <CryptoTableHeaderCell>Name</CryptoTableHeaderCell>
+                  <CryptoTableHeaderCell>Price (24h)</CryptoTableHeaderCell>
+                  <CryptoTableHeaderCell>Volume (24h)</CryptoTableHeaderCell>
+                  <CryptoTableHeaderCell>Market Cap</CryptoTableHeaderCell>
                 </tr>
-              )}
-            </tbody>
-          </CryptoTable>
+              </CryptoTableHeader>
+              <tbody>
+                {cryptoData.length > 0 ? (
+                  currentItems
+                    .filter((crypto) => crypto?.quote?.usd?.price && crypto?.quote?.usd?.market_Cap) // Filtering out coins without a price or market_Cap
+                    .map((crypto, index) => {
+                      const price = crypto?.quote?.usd?.price;
+                      const volume24h = crypto?.quote?.usd?.volume_24h;
+                      const marketCap = crypto?.quote?.usd?.market_Cap;
+
+                      const formattedPrice = price ? price.toLocaleString('en-US', {
+                        style: 'currency',
+                        currency: 'USD',
+                      }) : 'N/A';
+
+                      const formattedVolume24h = volume24h ? volume24h.toLocaleString('en-US', {
+                        style: 'currency',
+                        currency: 'USD',
+                      }) : 'N/A';
+
+                      const formattedMarketCap = marketCap ? marketCap.toLocaleString('en-US', {
+                        style: 'currency',
+                        currency: 'USD',
+                      }) : 'N/A';
+
+                      return (
+                        <CryptoTableRow key={crypto.id || index}>
+                          <CryptoTableData>{indexOfFirstItem + index + 1}</CryptoTableData>
+                          <CryptoTableData>
+                            <CryptoSymbolContainer>
+                              <CryptoLogo
+                                src={`https://s2.coinmarketcap.com/static/img/coins/64x64/${crypto.id}.png`}
+                                alt={`${crypto.symbol} logo`}
+                              />
+                              <CryptoName>{crypto.name}</CryptoName>
+                              <CryptoSymbol>{crypto.symbol}</CryptoSymbol>
+                            </CryptoSymbolContainer>
+                          </CryptoTableData>
+                          <CryptoTableData>{formattedPrice}</CryptoTableData>
+                          <CryptoTableData>{formattedVolume24h}</CryptoTableData>
+                          <CryptoTableData>{formattedMarketCap}</CryptoTableData>
+                        </CryptoTableRow>
+                      );
+                    })
+                ) : (
+                  <tr>
+                    <CryptoTableData colSpan="5">No data available</CryptoTableData>
+                  </tr>
+                )}
+              </tbody>
+            </CryptoTable>
+          )}
           <div>
             <button onClick={prevPage} disabled={currentPage === 1}>Previous</button>
             <button onClick={nextPage} disabled={indexOfLastItem >= cryptoData.length}>Next</button>

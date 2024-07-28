@@ -23,6 +23,7 @@ const HeaderComponentMenu = ({
       <Logo onClick={() => navigate('/')}>CoinTracker</Logo>
       <NavContainer>
         <NavLink onClick={() => navigate('/')}>Home</NavLink>
+        <NavLink onClick={() => navigate('/about')}>About Developer</NavLink>
       </NavContainer>
       <ButtonContainer>
         {isAuthenticated ? (

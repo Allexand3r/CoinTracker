@@ -11,7 +11,12 @@ import {
   Title,
   Description,
   ModalContent,
-  CloseButton, customStyles
+  CloseButton,
+  ModalTitle,
+  ModalInput,
+  ModalButton,
+  ModalLabel,
+  customStyles,
 } from './portfolioStyle';
 import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router-dom';
@@ -24,6 +29,7 @@ import '../Settings/AccountSecurity/nprogress-custom.css';
 function Portfolio() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [portfolioName, setPortfolioName] = useState('');
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -46,11 +52,12 @@ function Portfolio() {
   if (!isAuthenticated) {
     return null;
   }
+
   const handleNavLinkClick = (page) => {
     navigate('/');
   };
 
-  const handleManualTransactionClick = () => {
+  const handleCreatePortfolioClick = () => {
     setIsModalOpen(true);
   };
 
@@ -58,11 +65,20 @@ function Portfolio() {
     setIsModalOpen(false);
   };
 
-
   const handleLogout = () => {
     Cookies.remove('Authorization');
     setIsAuthenticated(false);
     navigate('/'); // Redirect to the main page
+  };
+
+  const handlePortfolioNameChange = (e) => {
+    setPortfolioName(e.target.value);
+  };
+
+  const handleCreatePortfolio = () => {
+    // Add your create portfolio logic here
+    console.log('Creating portfolio:', portfolioName);
+    setIsModalOpen(false);
   };
 
   return (
@@ -76,7 +92,7 @@ function Portfolio() {
         <PortfolioImage src={prtnoImage} alt="Portfolio" />
         <PortfolioText>Let’s get started with your first portfolio!</PortfolioText>
         <PortfolioTextBottom>Track profits, losses and valuation all in one place.</PortfolioTextBottom>
-        <ManualTransactionContainer onClick={handleManualTransactionClick}>
+        <ManualTransactionContainer onClick={handleCreatePortfolioClick}>
           <IconContainer>
             <img src="https://s2.coinmarketcap.com/static/cloud/img/portfolio/manual.svg?_=a9a383f" alt="Manual Transaction Icon" />
           </IconContainer>
@@ -92,6 +108,18 @@ function Portfolio() {
         >
           <ModalContent>
             <CloseButton onClick={closeModal}>&times;</CloseButton>
+            <ModalTitle>Create Portfolio</ModalTitle>
+            <ModalLabel>
+              Portfolio Name
+              <ModalInput
+                type="text"
+                value={portfolioName}
+                onChange={handlePortfolioNameChange}
+                maxLength="24"
+                placeholder="Enter your portfolio name"
+              />
+            </ModalLabel>
+            <ModalButton onClick={handleCreatePortfolio}>Create Portfolio</ModalButton>
           </ModalContent>
         </Modal>
       </PortfolioContent>

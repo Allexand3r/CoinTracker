@@ -1,4 +1,3 @@
-// portfolioStyle.js
 import styled from 'styled-components';
 
 export const PortfolioContent = styled.div`
@@ -77,7 +76,6 @@ export const ModalContent = styled.div`
   border-radius: 10px;
   max-width: 500px;
   margin: auto;
-
 `;
 
 export const ModalTitle = styled.h2`
@@ -86,12 +84,20 @@ export const ModalTitle = styled.h2`
 
 export const ModalInput = styled.input`
   width: 100%;
-
+  padding: 10px;
+  margin-bottom: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
 `;
 
 export const ModalButton = styled.button`
   background: #007bff;
-
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.3s;
 
   &:hover {
     background: #0056b3;
@@ -100,15 +106,21 @@ export const ModalButton = styled.button`
 
 export const ModalTextArea = styled.textarea`
   width: 100%;
+  padding: 10px;
+  margin-bottom: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
 `;
 
 export const ModalLabel = styled.label`
   display: block;
-
+  margin-bottom: 10px;
 `;
 
 export const ModalCheckboxLabel = styled.label`
   display: flex;
+  align-items: center;
+  margin-bottom: 20px;
 `;
 
 export const ModalCheckbox = styled.input`
@@ -116,10 +128,14 @@ export const ModalCheckbox = styled.input`
 `;
 
 export const CloseButton = styled.button`
+  position: absolute;
+  top: 10px;
+  right: 10px;
   background: transparent;
-  color: #000;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
 `;
-
 
 export const customStyles = {
   content: {
@@ -137,3 +153,19 @@ export const customStyles = {
     backgroundColor: 'rgba(0, 0, 0, 0.75)'
   }
 };
+
+export const CreatePortfolioButton = styled.button`
+  background-color: #0a66c2;
+  color: white;
+  border: none;
+  padding: 15px 30px;
+  border-radius: 5px;
+  font-size: 18px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  margin-top: 20px;
+
+  &:hover {
+    background-color: #095bb2;
+  }
+`;

@@ -26,7 +26,9 @@ function Register({ closeModal, onRegisterSuccess }) {
       const response = await fetch(`${apiUrl}/api/register`, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'ngrok-skip-browser-warning': 'true'
+
         },
         body: JSON.stringify({ email, password })
       });
