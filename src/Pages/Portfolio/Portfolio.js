@@ -24,7 +24,7 @@ import prtnoImage from './img/prtno.png'; // Импортируем изобра
 import Modal from 'react-modal';
 import nprogress from 'nprogress';
 import 'nprogress/nprogress.css';
-import '../Settings/AccountSecurity/nprogress-custom.css'; 
+import '../Settings/AccountSecurity/nprogress-custom.css';
 
 function Portfolio() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -75,10 +75,31 @@ function Portfolio() {
     setPortfolioName(e.target.value);
   };
 
-  const handleCreatePortfolio = () => {
-    // Add your create portfolio logic here
-    console.log('Creating portfolio:', portfolioName);
-    setIsModalOpen(false);
+  const handleCreatePortfolio = async () => {
+    const token = Cookies.get('Authorization');
+    const userId = 1; // Получите реальный UserId из контекста или состояния
+
+    try {
+      const response = await fetch('/api/portfolio', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify({ name: portfolioName, userId }),
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        console.log('Portfolio created:', result);
+        setIsModalOpen(false);
+        // Дополнительные действия после успешного создания портфолио
+      } else {
+        console.error('Failed to create portfolio:', response.statusText);
+      }
+    } catch (error) {
+      console.error('Error creating portfolio:', error);
+    }
   };
 
   return (
@@ -86,7 +107,7 @@ function Portfolio() {
       <HeaderComponentMenu
         isAuthenticated={isAuthenticated}
         handleNavLinkClick={handleNavLinkClick}
-        handleLogout={handleLogout} // Добавляем handleLogout
+        handleLogout={handleLogout}
       />
       <PortfolioContent>
         <PortfolioImage src={prtnoImage} alt="Portfolio" />

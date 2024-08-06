@@ -83,7 +83,7 @@ export const ModalTitle = styled.h2`
 `;
 
 export const ModalInput = styled.input`
-  width: 100%;
+  width: 90%;
   padding: 10px;
   margin-bottom: 20px;
   border: 1px solid #ccc;
